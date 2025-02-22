@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { AppointmentService } from '../services/AppointmentService';
 import { appointmentSchema } from '../validators/appointmentValidator';
 import Appointment from "../model/Appointment.model"
+import { parse, format } from 'date-fns';
 
 
 export class AppointmentController {
@@ -14,6 +15,10 @@ export class AppointmentController {
     async createAppointment(req: Request, res: Response): Promise<void> {
         try {
             const validatedData = appointmentSchema.parse(req.body);
+
+            const parsedTime = parse(validatedData.time, 'h:mm a', new Date());
+            validatedData.time = format(parsedTime, 'HH:mm');
+
             const appointment = new Appointment(validatedData);
             const savedAppointment = await this.appointmentService.createAppointment(appointment);
             res.status(201).json({ success: true, data: appointment });
