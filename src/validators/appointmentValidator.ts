@@ -9,6 +9,6 @@ export const appointmentSchema = z.object({
     phone: z.string().regex(/^\+?[1-9]\d{1,14}$/, "Invalid phone number format"),
     subject: z.string().min(5, "Subject must be at least 5 characters long"),
     date: z.string().refine(val => !isNaN(Date.parse(val)), "Invalid date format"),
-    time: z.string().regex(/^([01]?\d|2[0-3]):([0-5]\d)$/, "Invalid time format (HH:MM)"),
+    time: z.string().regex(/^(0?[1-9]|1[0-2]):[0-5][0-9] ?(AM|PM)$/i, "Invalid time format (HH:MM AM/PM)"),
     message: z.string().optional()
 });
