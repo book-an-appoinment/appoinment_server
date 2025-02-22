@@ -9,4 +9,8 @@ export class AppointmentService {
     async getAppointments(): Promise<IAppointment[]> {
         return await Appointment.find();
     }
+
+    async deleteAppointment(id: string): Promise<void> {
+        await Appointment.findByIdAndDelete(id);
+    }
 }

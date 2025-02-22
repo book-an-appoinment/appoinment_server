@@ -35,4 +35,14 @@ export class AppointmentController {
             res.status(500).json({ success: false, error: error.message });
         }
     }
+
+    async deleteAppointment(req: Request, res: Response): Promise<void> {
+        try {
+            const { id } = req.params;
+            await this.appointmentService.deleteAppointment(id);
+            res.status(200).json({ success: true, message: 'Appointment deleted successfully' });
+        } catch (error:any) {
+            res.status(500).json({ success: false, error: error.message });
+        }
+    }
 }
