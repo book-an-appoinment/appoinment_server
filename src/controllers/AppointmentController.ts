@@ -1,5 +1,8 @@
 import { Request, Response } from 'express';
 import { AppointmentService } from '../services/AppointmentService';
+import { appointmentSchema } from '../validators/appointmentValidator';
+import Appointment from "../model/Appointment.model"
+
 
 export class AppointmentController {
     private appointmentService: AppointmentService;
@@ -10,7 +13,9 @@ export class AppointmentController {
 
     async createAppointment(req: Request, res: Response): Promise<void> {
         try {
-            const appointment = await this.appointmentService.createAppointment(req.body);
+            const validatedData = appointmentSchema.parse(req.body);
+            const appointment = new Appointment(validatedData);
+            const savedAppointment = await this.appointmentService.createAppointment(appointment);
             res.status(201).json({ success: true, data: appointment });
         } catch (error:unknown) {
             if(error instanceof Error) {

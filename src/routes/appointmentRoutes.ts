@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Request, Response, Router } from 'express';
 import { AppointmentController } from '../controllers/AppointmentController';
 import { AppointmentService } from '../services/AppointmentService';
 
@@ -6,7 +6,7 @@ const router = Router();
 const appointmentService = new AppointmentService();
 const appointmentController = new AppointmentController(appointmentService);
 
-router.post('/appointments', (req, res) => appointmentController.createAppointment(req, res));
-router.get('/appointments', (req, res) => appointmentController.getAppointments(req, res));
+router.post('/appointments', (req:Request, res:Response) => appointmentController.createAppointment(req, res));
+router.get('/appointments', (req:Request, res:Response) => appointmentController.getAppointments(req, res));
 
 export default router;
