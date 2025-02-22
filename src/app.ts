@@ -1,14 +1,18 @@
 import express, { NextFunction, Request, Response } from "express";
 import { HttpError } from "http-errors";
+import cors from 'cors';
+import appointmentRoutes from "./routes/appointmentRoutes";
+
+
+
+
 
 const app = express();
-
+app.use(cors());
 app.use(express.json());
 
 // Root route
-app.get("/", (req, res) => {
-   res.send(" wel copme to express ");
-});
+app.use('/api', appointmentRoutes);
 
 // Auth routes
 
