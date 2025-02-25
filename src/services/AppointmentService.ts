@@ -6,8 +6,11 @@ export class AppointmentService {
         return await appointment.save();
     }
     
-    async getAppointments(): Promise<IAppointment[]> {
-        return await Appointment.find();
+    async getAppointments(page: number = 1, limit: number = 10): Promise<{ appointments: IAppointment[], total: number }> {
+        const skip = (page - 1) * limit;
+        const appointments = await Appointment.find().skip(skip).limit(limit);
+        const total = await Appointment.countDocuments();
+        return { appointments, total };
     }
 
     async deleteAppointment(id: string): Promise<void> {

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { AppointmentService } from '../services/AppointmentService';
 import { appointmentSchema } from '../validators/appointmentValidator';
-import Appointment from "../model/Appointment.model"
+import Appointment, { IAppointment } from "../model/Appointment.model"
 import { parse, format } from 'date-fns';
 
 
@@ -32,10 +32,25 @@ export class AppointmentController {
         }
     }
 
+   
+
+
     async getAppointments(req: Request, res: Response): Promise<void> {
         try {
-            const appointments = await this.appointmentService.getAppointments();
-            res.status(200).json({ success: true, data: appointments });
+
+            const page = parseInt(req.query.page as string) || 1;
+            const limit = parseInt(req.query.limit as string) || 10;
+            const { appointments, total } = await this.appointmentService.getAppointments(page, limit);
+            res.status(200).json({ 
+                success: true, 
+                data: appointments,
+                pagination: {
+                    page,
+                    limit,
+                    total,
+                    totalPages: Math.ceil(total / limit)
+                }
+            });
         } catch (error:any) {
             res.status(500).json({ success: false, error: error.message });
         }
